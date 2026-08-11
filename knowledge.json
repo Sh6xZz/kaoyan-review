@@ -1,0 +1,13 @@
+{
+  "knowledge": [
+    {
+      "text": "夹逼准则证明极限：lim(x→0) sinx/x = 1。通过 S△OAB < S扇形OAB < S△OAC，推导 sinx < x < tanx（x∈(0,π/2)），进而 cosx < sinx/x < 1"
+    },
+    {
+      "text": "重要极限推导：由 sinx < x < tanx 得 1 < x/sinx < 1/cosx，两边取倒数得 cosx < sinx/x < 1，x→0⁺时 sinx/x = 1"
+    },
+    {
+      "text": "夹逼准则练习：证明 lim(x→0) sin³x/x = 1，利用 sinx/x→1 及 sin²x→0 可得结果"
+    }
+  ]
+}

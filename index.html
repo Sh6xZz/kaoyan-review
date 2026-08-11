@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>考研复习助手</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="app-header">
+        <h1>考研复习助手</h1>
+        <p class="subtitle">在职考研 · 随时随地高效复习</p>
+    </header>
+
+    <!-- Tab 切换栏 -->
+    <nav class="tab-bar">
+        <button class="tab-btn active" data-tab="english">英语单词</button>
+        <button class="tab-btn" data-tab="math">数学练习</button>
+        <button class="tab-btn" data-tab="wrongbook">错题本 <span id="wrong-count" class="badge">0</span></button>
+    </nav>
+
+    <!-- ========== 英语单词模块 ========== -->
+    <section id="tab-english" class="tab-content active">
+        <!-- 添加单词 -->
+        <div class="card">
+            <h2>添加单词</h2>
+            <div class="input-row">
+                <input type="text" id="eng-word" placeholder="输入英语单词" autocomplete="off">
+                <input type="text" id="eng-meaning" placeholder="输入中文释义">
+                <button id="btn-add-word" class="btn btn-primary">添加</button>
+            </div>
+            <div class="word-list-header">
+                <span>已添加单词 (<span id="word-count">0</span>)</span>
+                <button id="btn-clear-words" class="btn btn-danger btn-sm">清空全部</button>
+            </div>
+            <ul id="word-list" class="word-list"></ul>
+        </div>
+
+        <!-- 生成句子 -->
+        <div class="card">
+            <h2>生成作文素材</h2>
+            <div class="input-row">
+                <select id="sentence-mode">
+                    <option value="random">随机抽取 3 个单词</option>
+                    <option value="all">使用全部单词</option>
+                    <option value="manual">手动选择单词</option>
+                </select>
+                <button id="btn-generate-sentence" class="btn btn-primary">生成句子</button>
+            </div>
+            <div id="manual-word-select" class="manual-select hidden">
+                <p class="hint">点击选择要使用的单词：</p>
+                <div id="word-chips" class="chips-container"></div>
+            </div>
+            <div id="sentence-output" class="sentence-output hidden">
+                <div class="sentence-text" id="generated-sentence"></div>
+                <div class="translation-text hidden" id="generated-translation"></div>
+                <div class="sentence-actions">
+                    <button id="btn-speak" class="btn btn-accent">朗读</button>
+                    <button id="btn-show-translation" class="btn btn-outline">翻译</button>
+                    <button id="btn-stop-speak" class="btn btn-outline hidden">停止</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 数学模块 ========== -->
+    <section id="tab-math" class="tab-content">
+        <!-- 知识点录入 -->
+        <div class="card">
+            <h2>知识点录入</h2>
+            <div class="input-row">
+                <input type="text" id="math-knowledge-input" placeholder="输入知识点，如：极限的四则运算法则">
+                <button id="btn-add-knowledge" class="btn btn-primary">添加</button>
+                <button id="btn-voice-input" class="btn btn-outline">语音输入</button>
+            </div>
+            <button id="btn-smart-split" class="btn btn-outline btn-sm" style="margin-bottom:6px;">智能分段</button>
+            <div id="split-preview" class="split-preview hidden">
+                <div class="split-header">
+                    <span>拆分结果（<span id="split-count">0</span> 条）</span>
+                </div>
+                <ul id="split-list" class="split-list"></ul>
+                <div class="split-actions">
+                    <button id="btn-confirm-split" class="btn btn-primary btn-sm">全部确认添加</button>
+                    <button id="btn-cancel-split" class="btn btn-outline btn-sm">取消</button>
+                </div>
+            </div>
+            <div id="voice-status" class="voice-status hidden"></div>
+            <div class="section-header">
+                <span>已录入知识点 (<span id="knowledge-count">0</span>)</span>
+                <button id="btn-clear-knowledge" class="btn btn-danger btn-sm">清空</button>
+            </div>
+            <ul id="knowledge-list" class="knowledge-list"></ul>
+        </div>
+
+        <!-- 拍照上传 -->
+        <div class="card">
+            <h2>拍照上传知识点</h2>
+            <div class="upload-area" id="upload-area">
+                <input type="file" id="img-upload" accept="image/*" multiple hidden>
+                <button id="btn-select-img" class="btn btn-outline">选择图片</button>
+                <span class="upload-hint">支持 JPG / PNG，可多选</span>
+            </div>
+            <div id="upload-list" class="upload-list hidden"></div>
+        </div>
+
+        <!-- 出题练习 -->
+        <div class="card">
+            <h2>出题练习</h2>
+            <div class="input-row">
+                <select id="question-type">
+                    <option value="mixed">混合题型</option>
+                    <option value="choice">选择题</option>
+                    <option value="fill">填空题</option>
+                </select>
+                <select id="question-count">
+                    <option value="1">1 题</option>
+                    <option value="3" selected>3 题</option>
+                    <option value="5">5 题</option>
+                    <option value="10">10 题</option>
+                </select>
+                <button id="btn-generate-quiz" class="btn btn-primary">出题</button>
+            </div>
+            <div id="quiz-area" class="quiz-area hidden"></div>
+            <div id="quiz-result" class="quiz-result hidden"></div>
+        </div>
+    </section>
+
+    <!-- ========== 错题本模块 ========== -->
+    <section id="tab-wrongbook" class="tab-content">
+        <div class="card">
+            <h2>错题本</h2>
+            <div class="wrongbook-actions">
+                <div class="wrongbook-toggle">
+                    <button class="toggle-btn active" data-view="time">按时间</button>
+                    <button class="toggle-btn" data-view="theorem">按定理分类</button>
+                </div>
+                <button id="btn-clear-wrong" class="btn btn-danger btn-sm">清空错题本</button>
+            </div>
+            <div id="wrongbook-list" class="wrongbook-list">
+                <p class="empty-hint">暂无错题，继续加油！</p>
+            </div>
+        </div>
+
+        <!-- 错题重做区域 -->
+        <div id="redo-area" class="card hidden">
+            <h2>错题重做</h2>
+            <div id="redo-content"></div>
+        </div>
+
+        <!-- 拍照上传错题 -->
+        <div class="card">
+            <h2>拍照上传错题</h2>
+            <div class="upload-area">
+                <input type="file" id="wrongbook-img-upload" accept="image/*" multiple hidden>
+                <button id="btn-wrongbook-select-img" class="btn btn-outline">选择图片</button>
+                <span class="upload-hint">支持 JPG / PNG，可多选。上传后我会识别题目并录入错题本</span>
+            </div>
+            <div id="wrongbook-upload-list" class="upload-list hidden"></div>
+        </div>
+    </section>
+
+    <script src="js/storage.js"></script>
+    <script src="js/english.js"></script>
+    <script src="js/math.js"></script>
+    <script src="js/wrongbook.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
