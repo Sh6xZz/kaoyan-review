@@ -54,6 +54,23 @@ const Storage = {
     clearKnowledge() {
         localStorage.setItem(this.KEYS.KNOWLEDGE, '[]');
     },
+    // 初始化知识点：从 knowledge.js 全局变量合并到 localStorage
+    initKnowledge() {
+        if (!window.KNOWLEDGE_DATA || !Array.isArray(window.KNOWLEDGE_DATA)) return;
+        const existing = this.getKnowledge();
+        const existingTexts = new Set(existing.map(k => k.text));
+        let added = 0;
+        window.KNOWLEDGE_DATA.forEach(text => {
+            if (!existingTexts.has(text)) {
+                existing.push({ text, addedAt: Date.now() });
+                existingTexts.add(text);
+                added++;
+            }
+        });
+        if (added > 0) {
+            localStorage.setItem(this.KEYS.KNOWLEDGE, JSON.stringify(existing));
+        }
+    },
 
     // ========== 错题本 ==========
     getWrongBook() {

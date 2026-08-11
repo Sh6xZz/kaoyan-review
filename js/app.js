@@ -48,6 +48,9 @@
         if (e.key === 'Enter') document.getElementById('btn-add-knowledge').click();
     });
 
+    // ========== 初始化知识点 ==========
+    Storage.initKnowledge();
+
     // ========== 初始化各模块 ==========
     EnglishModule.init();
     MathModule.init();
